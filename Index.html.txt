@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLEOS Joyería - Elegancia que Perdura</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Applying custom fonts through CSS to have a central point of control */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1, h2, h3, h4, h5, h6, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Custom gold color class */
+        .text-gold {
+            color: #D4AF37;
+        }
+        .bg-gold {
+            background-color: #D4AF37;
+        }
+        .border-gold {
+            border-color: #D4AF37;
+        }
+
+        /* Hero section background */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1588444968368-a315e7a91a27?q=80&w=1887&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+        }
+        
+        /* Header background on scroll */
+        .header-scrolled {
+            background-color: rgba(253, 252, 251, 0.85); /* Light mode background on scroll */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .dark .header-scrolled {
+            background-color: rgba(17, 17, 17, 0.85); /* Dark mode background on scroll */
+        }
+        
+        /* Simple transition for interactive elements */
+        .transition-all {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Chatbot animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* --- Aurora & Firefly Effects --- */
+        #firefly-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind everything */
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent; /* Default transparent */
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .dark body::before {
+             background: 
+                radial-gradient(circle at 15% 25%, rgba(212, 175, 55, 0.35), transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(230, 230, 230, 0.2), transparent 50%);
+            animation: aurora 16s infinite linear;
+        }
+        
+        @keyframes aurora {
+            0% { transform: rotate(0deg) scale(2.2) translate(0, 0); }
+            50% { transform: rotate(180deg) scale(2.6) translate(5vw, -5vh); }
+            100% { transform: rotate(360deg) scale(2.2) translate(0, 0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b89b3f;
+        }
+    </style>
+</head>
+<body class="bg-[#FDFCFB] text-[#1E1E1E] dark:bg-black dark:text-gray-200 antialiased">
+    
+    <!-- Background Effects Canvas -->
+    <canvas id="firefly-canvas"></canvas>
+
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#inicio" class="text-3xl font-bold font-serif text-white tracking-wider">KLEOS</a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#inicio" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navHome">Inicio</a>
+                <a href="#colecciones" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navCollections">Colecciones</a>
+                <a href="#nosotros" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navAbout">Nosotros</a>
+                <a href="#noticias" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navNews">Noticias</a>
+                <a href="#contacto" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navContact">Contacto</a>
+                
+                 <!-- Language Dropdown -->
+                <div class="relative" id="lang-dropdown-container">
+                    <button id="lang-dropdown-button" class="flex items-center text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors font-medium">
+                        <span id="current-lang">ES</span>
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="lang-options" class="hidden absolute right-0 mt-2 w-28 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="es">Español</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="en">English</a>
+                    </div>
+                </div>
+
+                <!-- Theme Dropdown -->
+                <div class="relative" id="theme-dropdown-container">
+                    <button id="theme-dropdown-button" class="flex items-center text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors">
+                        <span id="theme-icon-desktop">
+                            <!-- Icon will be inserted by JS -->
+                        </span>
+                    </button>
+                    <div id="theme-options" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10">
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-theme-value="light">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            Claro
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-theme-value="dark">
+                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                            Oscuro
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-theme-value="system">
+                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            Sistema
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                 <!-- Language Dropdown Mobile is part of the mobile menu now -->
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-sm">
+            <a href="#inicio" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavHome">Inicio</a>
+            <a href="#colecciones" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavCollections">Colecciones</a>
+            <a href="#nosotros" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavAbout">Nosotros</a>
+            <a href="#noticias" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavNews">Noticias</a>
+            <a href="#contacto" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavContact">Contacto</a>
+            <a href="https://www.instagram.com/kleosjoyeria.bga/" target="_blank" rel="noopener noreferrer" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black">Instagram</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ===== HERO SECTION ===== -->
+        <section id="inicio" class="h-screen flex items-center justify-center hero-bg">
+            <div class="text-center text-white p-4">
+                <h1 class="text-5xl md:text-7xl font-bold font-serif leading-tight mb-4" data-lang="heroTitle">Elegancia que Perdura</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto" data-lang="heroSubtitle">Diseños exclusivos en oro de 18 quilates que capturan la esencia del lujo moderno.</p>
+                <a href="#colecciones" class="bg-gold text-black font-bold py-3 px-8 rounded-full hover:bg-white transition-all duration-300 transform hover:scale-105" data-lang="heroButton">
+                    Descubrir Colección
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== COLLECTIONS SECTION ===== -->
+        <section id="colecciones" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-serif text-center mb-12" data-lang="collectionsTitle">Nuestras Colecciones</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Collection Items... -->
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/main/WhatsApp%20Image%202025-09-23%20at%2011.54.39%20PM.jpeg" alt="Colección de Anillos" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catRings">Anillos</h3>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/refs/heads/main/collar%20gucci.png" alt="Colección de Collares" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catNecklaces">Collares</h3>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/refs/heads/main/pulsera.png" alt="Colección de Pulseras" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catBracelets">Pulseras</h3>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1610171333333-3c94c5b3e3e3?q=80&w=1887&auto=format&fit=crop" alt="Colección de Aretes" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catEarrings">Aretes</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== ABOUT US SECTION ===== -->
+        <section id="nosotros" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h2 class="text-4xl font-serif mb-6" data-lang="aboutTitle">Gerente General</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed" data-lang="aboutP1">
+                        Jhonatan David Manrique Bautista, de 23 años y Administrador de Negocios Internacionales, es la visión detrás de KLEOS. Radicado en Bucaramanga, se ha capacitado con los mejores expertos internacionales en alta joyería para garantizar la máxima calidad en cada creación.
+                    </p>
+                </div>
+                <div class="order-1 md:order-2">
+                    <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/refs/heads/main/ceo.jpeg" alt="Gerente General Jhonatan Manrique" class="rounded-lg shadow-2xl w-full">
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NEWS SECTION ===== -->
+        <section id="noticias" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-serif text-center mb-12" data-lang="newsTitle">Últimas Noticias</h2>
+                <div class="max-w-2xl mx-auto space-y-8">
+                    <!-- News Card 1 -->
+                    <div class="bg-white/50 dark:bg-gray-900/50 p-6 rounded-lg shadow-md border border-gray-200/50 dark:border-gray-800/50 text-center">
+                        <h3 class="text-2xl font-semibold mb-2" data-lang="news1Title">Lanzamiento Colección "Aurora"</h3>
+                        <p class="leading-relaxed text-gray-700 dark:text-gray-300" data-lang="news1Text">Estamos emocionados de anunciar nuestra nueva colección "Aurora", inspirada en los viajes de nuestro fundador. Cada pieza captura la luz y el misterio de los destinos más exóticos. Disponible a partir del 1 de Octubre.</p>
+                    </div>
+                    <!-- News Card 2 -->
+                    <div class="bg-white/50 dark:bg-gray-900/50 p-6 rounded-lg shadow-md border border-gray-200/50 dark:border-gray-800/50 text-center">
+                        <h3 class="text-2xl font-semibold mb-2" data-lang="news2Title">KLEOS en la Semana de la Moda</h3>
+                        <p class="leading-relaxed text-gray-700 dark:text-gray-300" data-lang="news2Text">Nuestras joyas destacaron en la pasarela de la Semana de la Moda de Bogotá, complementando los diseños de reconocidos talentos nacionales. Un hito que reafirma nuestro compromiso con el lujo y el diseño colombiano.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT SECTION ===== -->
+        <section id="contacto" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-serif text-center mb-12" data-lang="contactTitle">Contáctanos</h2>
+                <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4" data-lang="formTitle">Envíanos un Mensaje</h3>
+                        <form id="contact-form" novalidate>
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 dark:text-gray-300 mb-2" data-lang="formName">Nombre</label>
+                                <input type="text" id="name" name="name" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-gray-700 dark:text-gray-300 mb-2" data-lang="formEmail">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="message" class="block text-gray-700 dark:text-gray-300 mb-2" data-lang="formMessage">Mensaje</label>
+                                <textarea id="message" name="message" rows="4" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-gold" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-gold text-black font-bold py-3 px-6 rounded-md hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300" data-lang="formButton">Enviar Mensaje</button>
+                        </form>
+                         <p id="form-success-message" class="hidden mt-4 text-center text-green-500" data-lang="formSuccess">¡Gracias! Tu mensaje ha sido enviado con éxito.</p>
+                    </div>
+                    <div class="mt-8 md:mt-0">
+                        <h3 class="text-2xl font-semibold mb-4" data-lang="infoTitle">Información</h3>
+                        <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                           <div class="flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span>Bucaramanga, Colombia</span>
+                           </div>
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.85 0 3.58-.5 5.07-1.38l-1.4-1.4c-1.2.66-2.58 1.05-4.04 1.05-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8v.17l-2.5-2.5L18 9.34l4.66 4.66-4.66 4.66-1.17-1.17 2.5-2.5V12c0-4.41-3.59-8-8-8z" transform="scale(1.2) translate(-2.4, -2.4)"/><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 013.482 3.583c.636-.247 1.363-.416 2.427-.465C7.007 2.013 7.362 2 9.792 2h2.523zm0 2.163h-2.523c-2.386 0-2.674.01-3.615.056-.926.043-1.448.2-1.844.363a2.72 2.72 0 00-1.01 1.01c-.164.396-.32.918-.363 1.844-.046.942-.056 1.23-.056 3.615s.01 2.673.056 3.615c.043.926.2 1.448.363 1.844a2.72 2.72 0 001.01 1.01c.396.164.918.32 1.844.363.942.046 1.23.056 3.615.056s2.673-.01 3.615-.056c.926-.043 1.448-.2 1.844-.363a2.72 2.72 0 001.01-1.01c.164-.396.32-.918-.363-1.844.046-.942.056-1.23.056-3.615s-.01-2.673-.056-3.615c-.043-.926-.2-1.448-.363-1.844a2.72 2.72 0 00-1.01-1.01c-.396-.164-.918-.32-1.844-.363-.942-.046-1.23-.056-3.615-.056z" clip-rule="evenodd"></path><path d="M12 6.845a5.155 5.155 0 100 10.31 5.155 5.155 0 000-10.31zm0 8.162a3.007 3.007 0 110-6.014 3.007 3.007 0 010 6.014zM16.949 6.802a1.238 1.238 0 100 2.475 1.238 1.238 0 000-2.475z"></path></svg>
+                               <a href="https://www.instagram.com/kleosjoyeria.bga/" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">
+                                    @kleosjoyeria.bga
+                               </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-gray-100 dark:bg-gray-900 py-8 border-t border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-6 text-center text-gray-500 dark:text-gray-400">
+            <p class="mb-4">Desarrollado por Ingeniero Camilo Andrés Serrano Sánchez</p>
+            <p data-lang="footerRights">&copy; 2025 KLEOSJOYERIA.BGA. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <!-- ===== FLOATING BUTTONS ===== -->
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/573024440638" target="_blank" rel="noopener noreferrer" class="fixed bottom-5 left-5 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-all transform hover:scale-110 z-40">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M16.75 13.96c.25.13.41.2.52.34.11.14.11.44-.04.81-.15.37-.9.95-1.28 1.13-.38.18-1.03.3-1.57.15-.54-.15-1.44-.55-2.7-1.65-1.26-1.1-2.07-2.43-2.22-2.83-.15-.4-.01-.61.13-.8.14-.19.32-.42.49-.6.17-.18.27-.3.39-.5.12-.2.06-.41-.04-.55-.1-.14-.54-.64-.7-1.02-.16-.38-.34-.48-.5-.48-.16 0-.34.02-.5.02s-.41.06-.61.34c-.2.28-.77.76-.77,1.85s.8,2.15,1,2.3c.2.15,1.57,2.4,3.8,3.35,2.23.95,2.4,1.05,2.87.9.47-.15.93-.6,1.08-1.18.15-.58.15-1.08.11-1.18-.04-.1-.16-.16-.34-.26zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/></svg>
+    </a>
+
+    <!-- AI Assistant Button -->
+    <button id="ai-chat-button" class="fixed bottom-5 right-5 bg-gold text-black p-3 rounded-full shadow-lg hover:bg-white transition-all transform hover:scale-110 z-40">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9.5 9.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm3 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3.5-4c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg>
+    </button>
+    
+    <!-- AI Assistant Chat Window -->
+    <div id="ai-chat-window" class="hidden fixed bottom-24 right-5 w-80 max-w-[90vw] bg-white dark:bg-gray-800 text-black dark:text-gray-200 rounded-lg shadow-2xl z-40 fade-in">
+        <!-- Chat Header -->
+        <div class="bg-gray-800 dark:bg-gray-900 text-white p-3 rounded-t-lg flex justify-between items-center">
+            <h3 class="font-bold" data-lang="chatTitle">Asistente Virtual KLEOS</h3>
+            <button id="close-chat-button" class="text-white hover:text-gray-300">&times;</button>
+        </div>
+        <!-- Chat Body -->
+        <div id="chat-body" class="p-4 h-64 overflow-y-auto">
+            <!-- Initial message from AI -->
+            <div class="mb-3">
+                <p class="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 p-2 rounded-lg inline-block" data-lang="chatWelcome">¡Hola! Soy tu asistente virtual. ¿Cómo puedo ayudarte con nuestras joyas de oro 18k?</p>
+            </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex">
+            <input type="text" id="chat-input" data-lang-placeholder="chatPlaceholder" placeholder="Escribe tu pregunta..." class="flex-grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md p-2 focus:outline-none focus:border-black">
+            <button id="send-chat-button" class="bg-black dark:bg-gray-700 text-white px-4 rounded-r-md hover:bg-gray-800 dark:hover:bg-gray-600" data-lang="chatSend">Enviar</button>
+        </div>
+    </div>
+
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Theme Management ---
+            const theme = {
+                init: function() {
+                    this.set(this.get(), false);
+                    this.attachListeners();
+                },
+                get: function() {
+                    return localStorage.getItem('theme') || 'dark'; // Default to dark mode
+                },
+                set: function(mode, save = true) {
+                    if (save) localStorage.setItem('theme', mode);
+
+                    let newMode = mode;
+                    if (mode === 'system') {
+                        newMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                        if(save) localStorage.removeItem('theme');
+                    }
+                    
+                    if (newMode === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    this.updateIcon(mode);
+                },
+                updateIcon: function(mode) {
+                    const iconContainer = document.getElementById('theme-icon-desktop');
+                    let iconSvg = '';
+                     if (mode === 'light') {
+                        iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>';
+                    } else if (mode === 'dark') {
+                        iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>';
+                    } else { // system
+                        iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>';
+                    }
+                    iconContainer.innerHTML = iconSvg;
+                },
+                attachListeners: function() {
+                    const dropdownButton = document.getElementById('theme-dropdown-button');
+                    const optionsContainer = document.getElementById('theme-options');
+                    
+                    dropdownButton.addEventListener('click', (e) => {
+                         e.stopPropagation();
+                         optionsContainer.classList.toggle('hidden');
+                    });
+
+                    document.querySelectorAll('[data-theme-value]').forEach(el => {
+                        el.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const newTheme = e.currentTarget.getAttribute('data-theme-value');
+                            this.set(newTheme);
+                            optionsContainer.classList.add('hidden');
+                        });
+                    });
+
+                     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                        if (this.get() === 'system') {
+                            this.set('system');
+                        }
+                    });
+                }
+            };
+            theme.init();
+
+
+            // --- Language Translation ---
+            const translations = {
+                es: {
+                    navHome: "Inicio",
+                    navCollections: "Colecciones",
+                    navAbout: "Nosotros",
+                    navNews: "Noticias",
+                    navContact: "Contacto",
+                    mNavHome: "Inicio",
+                    mNavCollections: "Colecciones",
+                    mNavAbout: "Nosotros",
+                    mNavNews: "Noticias",
+                    mNavContact: "Contacto",
+                    heroTitle: "Elegancia que Perdura",
+                    heroSubtitle: "Diseños exclusivos en oro de 18 quilates que capturan la esencia del lujo moderno.",
+                    heroButton: "Descubrir Colección",
+                    collectionsTitle: "Nuestras Colecciones",
+                    catRings: "Anillos",
+                    catNecklaces: "Collares",
+                    catBracelets: "Pulseras",
+                    catEarrings: "Aretes",
+                    aboutTitle: "Gerente General",
+                    aboutP1: "Jhonatan David Manrique Bautista, de 23 años y Administrador de Negocios Internacionales, es la visión detrás de KLEOS. Radicado en Bucaramanga, se ha capacitado con los mejores expertos internacionales en alta joyería para garantizar la máxima calidad en cada creación.",
+                    aboutP2: "Su pasión por la excelencia y el diseño se complementa con su amor por los deportes acuáticos, infundiendo en cada pieza un espíritu de libertad, aventura y sofisticación.",
+                    newsTitle: "Últimas Noticias",
+                    news1Title: "Lanzamiento Colección \"Aurora\"",
+                    news1Text: "Estamos emocionados de anunciar nuestra nueva colección \"Aurora\", inspirada en los viajes de nuestro fundador. Cada pieza captura la luz y el misterio de los destinos más exóticos. Disponible a partir del 1 de Octubre.",
+                    news2Title: "KLEOS en la Semana de la Moda",
+                    news2Text: "Nuestras joyas destacaron en la pasarela de la Semana de la Moda de Bogotá, complementando los diseños de reconocidos talentos nacionales. Un hito que reafirma nuestro compromiso con el lujo y el diseño colombiano.",
+                    contactTitle: "Contáctanos",
+                    formTitle: "Envíanos un Mensaje",
+                    formName: "Nombre",
+                    formEmail: "Correo Electrónico",
+                    formMessage: "Mensaje",
+                    formButton: "Enviar Mensaje",
+                    formSuccess: "¡Gracias! Tu mensaje ha sido enviado con éxito.",
+                    infoTitle: "Información",
+                    footerRights: `© ${new Date().getFullYear()} KLEOSJOYERIA.BGA. Todos los derechos reservados.`,
+                    chatTitle: "Asistente Virtual KLEOS",
+                    chatWelcome: "¡Hola! Soy tu asistente virtual. ¿Cómo puedo ayudarte con nuestras joyas de oro 18k?",
+                    chatPlaceholder: "Escribe tu pregunta...",
+                    chatSend: "Enviar"
+                },
+                en: {
+                    navHome: "Home",
+                    navCollections: "Collections",
+                    navAbout: "About Us",
+                    navNews: "News",
+                    navContact: "Contact",
+                    mNavHome: "Home",
+                    mNavCollections: "Collections",
+                    mNavAbout: "About Us",
+                    mNavNews: "News",
+                    mNavContact: "Contact",
+                    heroTitle: "Enduring Elegance",
+                    heroSubtitle: "Exclusive designs in 18k gold that capture the essence of modern luxury.",
+                    heroButton: "Discover Collection",
+                    collectionsTitle: "Our Collections",
+                    catRings: "Rings",
+                    catNecklaces: "Necklaces",
+                    catBracelets: "Bracelets",
+                    catEarrings: "Earrings",
+                    aboutTitle: "General Manager",
+                    aboutP1: "Jhonatan David Manrique Bautista, 23, an International Business Administrator, is the vision behind KLEOS. Based in Bucaramanga, he has trained with the best international experts in high jewelry to ensure the highest quality in every creation.",
+                    aboutP2: "His passion for excellence and design is complemented by his love for water sports, infusing each piece with a spirit of freedom, adventure, and sophistication.",
+                    newsTitle: "Latest News",
+                    news1Title: "Launch of the \"Aurora\" Collection",
+                    news1Text: "We are excited to announce our new \"Aurora\" collection, inspired by our founder's travels. Each piece captures the light and mystery of the most exotic destinations. Available from October 1st.",
+                    news2Title: "KLEOS at Fashion Week",
+                    news2Text: "Our jewelry shone on the runway at Bogotá Fashion Week, complementing the designs of renowned national talents. A milestone that reaffirms our commitment to luxury and Colombian design.",
+                    contactTitle: "Contact Us",
+                    formTitle: "Send us a Message",
+                    formName: "Name",
+                    formEmail: "Email",
+                    formMessage: "Message",
+                    formButton: "Send Message",
+                    formSuccess: "Thank you! Your message has been sent successfully.",
+                    infoTitle: "Information",
+                    footerRights: `© ${new Date().getFullYear()} KLEOSJOYERIA.BGA. All rights reserved.`,
+                    chatTitle: "KLEOS Virtual Assistant",
+                    chatWelcome: "Hello! I am your virtual assistant. How can I help you with our 18k gold jewelry?",
+                    chatPlaceholder: "Type your question...",
+                    chatSend: "Send"
+                }
+            };
+
+            function setLanguage(lang) {
+                document.documentElement.lang = lang;
+                document.querySelectorAll('[data-lang]').forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    }
+                });
+                document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-lang-placeholder');
+                     if (translations[lang] && translations[lang][key]) {
+                        el.placeholder = translations[lang][key];
+                    }
+                });
+                // Update language display
+                document.getElementById('current-lang').textContent = lang.toUpperCase();
+            }
+            
+            function setupDropdown(buttonId, optionsId, callback) {
+                const button = document.getElementById(buttonId);
+                const options = document.getElementById(optionsId);
+                
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    options.classList.toggle('hidden');
+                });
+
+                options.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        const link = e.target.closest('a');
+                        callback(link);
+                        options.classList.add('hidden');
+                    }
+                });
+            }
+            
+            setupDropdown('lang-dropdown-button', 'lang-options', (link) => {
+                 setLanguage(link.getAttribute('data-lang-value'));
+            });
+
+            // Close dropdowns if clicked outside
+            document.addEventListener('click', () => {
+                document.getElementById('lang-options').classList.add('hidden');
+                document.getElementById('theme-options').classList.add('hidden');
+            });
+
+
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // --- Contact Form Handling ---
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('form-success-message');
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = contactForm.name.value.trim();
+                const email = contactForm.email.value.trim();
+                const message = contactForm.message.value.trim();
+
+                if (name === '' || email === '' || message === '') {
+                    alert('Por favor, completa todos los campos.');
+                    return;
+                }
+                
+                successMessage.classList.remove('hidden');
+                contactForm.reset();
+                
+                setTimeout(() => { successMessage.classList.add('hidden'); }, 5000);
+            });
+
+            // --- AI Chat Assistant ---
+            const chatButton = document.getElementById('ai-chat-button');
+            const chatWindow = document.getElementById('ai-chat-window');
+            const closeChatButton = document.getElementById('close-chat-button');
+            const chatBody = document.getElementById('chat-body');
+            const chatInput = document.getElementById('chat-input');
+            const sendChatButton = document.getElementById('send-chat-button');
+
+            chatButton.addEventListener('click', () => chatWindow.classList.toggle('hidden'));
+            closeChatButton.addEventListener('click', () => chatWindow.classList.add('hidden'));
+            
+            const aiResponses = { es: {"oro": "Sí, todas nuestras joyas están elaboradas con oro de 18 quilates, garantizando la más alta calidad y pureza.","envios": "¡Claro que sí! Realizamos envíos seguros a todo el territorio colombiano.","pago": "Aceptamos transferencias bancarias, Nequi, Daviplata y todas las principales tarjetas a través de nuestro link de pago seguro.","ubicacion": "Estamos orgullosamente ubicados en Bucaramanga, Colombia.","tienda": "Actualmente operamos como una joyería en línea, no contamos con tienda física.","default": "Soy un asistente virtual. Para consultas más específicas, por favor contáctanos a través de WhatsApp."}, en: {"gold": "Yes, all our jewelry is made with 18-karat gold, ensuring the highest quality.","shipping": "Of course! We offer secure shipping throughout Colombia.","payment": "We accept bank transfers, Nequi, Daviplata, and all major credit/debit cards.","location": "We are proudly located in Bucaramanga, Colombia.","store": "We currently operate as an online jewelry store.","default": "I am a virtual assistant. For specific inquiries, please contact us via WhatsApp."}};
+
+            function handleSendMessage() {
+                const userMessage = chatInput.value.trim();
+                if (userMessage === '') return;
+                appendMessage(userMessage, 'user');
+                chatInput.value = '';
+                setTimeout(() => {
+                    const currentLang = document.documentElement.lang || 'es';
+                    const aiReply = getAiResponse(userMessage, currentLang);
+                    appendMessage(aiReply, 'ai');
+                }, 1000);
+            }
+
+            sendChatButton.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleSendMessage());
+
+            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                const messageP = document.createElement('p');
+                messageP.textContent = message;
+
+                if (sender === 'user') {
+                    messageDiv.classList.add('text-right', 'mb-3');
+                    messageP.classList.add('bg-gold', 'text-black', 'p-2', 'rounded-lg', 'inline-block');
+                } else {
+                    messageDiv.classList.add('mb-3');
+                    messageP.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-gray-200', 'p-2', 'rounded-lg', 'inline-block');
+                }
+                messageDiv.appendChild(messageP);
+                chatBody.appendChild(messageDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            function getAiResponse(message, lang) {
+                const lowerCaseMessage = message.toLowerCase();
+                const responses = aiResponses[lang];
+                for (const key in responses) {
+                    if (lowerCaseMessage.includes(key)) return responses[key];
+                }
+                return responses.default;
+            }
+
+            // --- Enchanted Fireflies Effect ---
+            const canvas = document.getElementById('firefly-canvas');
+            const ctx = canvas.getContext('2d');
+            let state = {}; 
+
+            const enchantedLogic = (ctx, s) => {
+                const w = ctx.canvas.width; const h = ctx.canvas.height;
+                if (!s.p) {
+                    s.p = [];
+                    for (let i = 0; i < 60; i++) { // Increased particle count
+                        s.p.push({ x: Math.random() * w, y: Math.random() * h, sz: Math.random() * 2 + 1, sx: (Math.random() - 0.5) * 0.4, sy: (Math.random() - 0.5) * 0.4, o: Math.random() });
+                    }
+                }
+                ctx.clearRect(0, 0, w, h);
+                ctx.globalCompositeOperation = 'lighter'; // Glow effect
+                s.p.forEach(p => {
+                    p.x += p.sx; p.y += p.sy; p.o += (Math.random() - 0.5) * 0.1;
+                    if (p.o < 0) p.o = 0; if (p.o > 1) p.o = 1;
+                    if (p.x > w || p.x < 0) p.sx *= -1;
+                    if (p.y > h || p.y < 0) p.sy *= -1;
+                    const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.sz * 2.5);
+                    gradient.addColorStop(0, `rgba(220, 180, 80, ${p.o * 0.9})`);
+                    gradient.addColorStop(1, 'rgba(212, 175, 55, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.sz * 2.5, 0, Math.PI * 2); ctx.fill();
+                });
+            };
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                state = {}; 
+            }
+
+            function animate() {
+                enchantedLogic(ctx, state);
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animate();
+            
+            // Set initial language after all setup
+            setLanguage('es'); 
+        });
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KLEOS Joyería - Elegancia que Perdura</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Applying custom fonts through CSS to have a central point of control */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1, h2, h3, h4, h5, h6, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Custom gold color class */
+        .text-gold {
+            color: #D4AF37;
+        }
+        .bg-gold {
+            background-color: #D4AF37;
+        }
+        .border-gold {
+            border-color: #D4AF37;
+        }
+
+        /* Hero section background */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1588444968368-a315e7a91a27?q=80&w=1887&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+        }
+        
+        /* Header background on scroll */
+        .header-scrolled {
+            background-color: rgba(253, 252, 251, 0.85); /* Light mode background on scroll */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .dark .header-scrolled {
+            background-color: rgba(17, 17, 17, 0.85); /* Dark mode background on scroll */
+        }
+        
+        /* Simple transition for interactive elements */
+        .transition-all {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Chatbot animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* --- Aurora & Firefly Effects --- */
+        #firefly-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind everything */
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent; /* Default transparent */
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .dark body::before {
+             background: 
+                radial-gradient(circle at 15% 25%, rgba(212, 175, 55, 0.35), transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(230, 230, 230, 0.2), transparent 50%);
+            animation: aurora 16s infinite linear;
+        }
+        
+        @keyframes aurora {
+            0% { transform: rotate(0deg) scale(2.2) translate(0, 0); }
+            50% { transform: rotate(180deg) scale(2.6) translate(5vw, -5vh); }
+            100% { transform: rotate(360deg) scale(2.2) translate(0, 0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b89b3f;
+        }
+    </style>
+</head>
+<body class="bg-[#FDFCFB] text-[#1E1E1E] dark:bg-black dark:text-gray-200 antialiased">
+    
+    <!-- Background Effects Canvas -->
+    <canvas id="firefly-canvas"></canvas>
+
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#inicio" class="text-3xl font-bold font-serif text-white tracking-wider">KLEOS</a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#inicio" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navHome">Inicio</a>
+                <a href="#colecciones" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navCollections">Colecciones</a>
+                <a href="#nosotros" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navAbout">Nosotros</a>
+                <a href="#noticias" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navNews">Noticias</a>
+                <a href="#contacto" class="text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors" data-lang="navContact">Contacto</a>
+                
+                 <!-- Language Dropdown -->
+                <div class="relative" id="lang-dropdown-container">
+                    <button id="lang-dropdown-button" class="flex items-center text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors font-medium">
+                        <span id="current-lang">ES</span>
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="lang-options" class="hidden absolute right-0 mt-2 w-28 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="es">Español</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="en">English</a>
+                    </div>
+                </div>
+
+                <!-- Theme Dropdown -->
+                <div class="relative" id="theme-dropdown-container">
+                    <button id="theme-dropdown-button" class="flex items-center text-white md:text-gray-700 dark:md:text-gray-300 hover:text-gold transition-colors">
+                        <span id="theme-icon-desktop">
+                            <!-- Icon will be inserted by JS -->
+                        </span>
+                    </button>
+                    <div id="theme-options" class="hidden absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-10">
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-theme-value="light">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            Claro
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-theme-value="dark">
+                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                            Oscuro
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" data-theme-value="system">
+                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            Sistema
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                 <!-- Language Dropdown Mobile is part of the mobile menu now -->
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-sm">
+            <a href="#inicio" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavHome">Inicio</a>
+            <a href="#colecciones" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavCollections">Colecciones</a>
+            <a href="#nosotros" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavAbout">Nosotros</a>
+            <a href="#noticias" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavNews">Noticias</a>
+            <a href="#contacto" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black" data-lang="mNavContact">Contacto</a>
+            <a href="https://www.instagram.com/kleosjoyeria.bga/" target="_blank" rel="noopener noreferrer" class="block py-3 px-6 text-gray-800 dark:text-gray-200 hover:bg-gold hover:text-black dark:hover:text-black">Instagram</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ===== HERO SECTION ===== -->
+        <section id="inicio" class="h-screen flex items-center justify-center hero-bg">
+            <div class="text-center text-white p-4">
+                <h1 class="text-5xl md:text-7xl font-bold font-serif leading-tight mb-4" data-lang="heroTitle">Elegancia que Perdura</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto" data-lang="heroSubtitle">Diseños exclusivos en oro de 18 quilates que capturan la esencia del lujo moderno.</p>
+                <a href="#colecciones" class="bg-gold text-black font-bold py-3 px-8 rounded-full hover:bg-white transition-all duration-300 transform hover:scale-105" data-lang="heroButton">
+                    Descubrir Colección
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== COLLECTIONS SECTION ===== -->
+        <section id="colecciones" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-serif text-center mb-12" data-lang="collectionsTitle">Nuestras Colecciones</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Collection Items... -->
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/main/WhatsApp%20Image%202025-09-23%20at%2011.54.39%20PM.jpeg" alt="Colección de Anillos" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catRings">Anillos</h3>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/refs/heads/main/collar%20gucci.png" alt="Colección de Collares" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catNecklaces">Collares</h3>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/refs/heads/main/pulsera.png" alt="Colección de Pulseras" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catBracelets">Pulseras</h3>
+                        </div>
+                    </div>
+                    <div class="group relative overflow-hidden rounded-lg shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1610171333333-3c94c5b3e3e3?q=80&w=1887&auto=format&fit=crop" alt="Colección de Aretes" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-3xl font-serif text-white" data-lang="catEarrings">Aretes</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== ABOUT US SECTION ===== -->
+        <section id="nosotros" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h2 class="text-4xl font-serif mb-6" data-lang="aboutTitle">Gerente General</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed" data-lang="aboutP1">
+                        Jhonatan David Manrique Bautista, de 23 años y Administrador de Negocios Internacionales, es la visión detrás de KLEOS. Radicado en Bucaramanga, se ha capacitado con los mejores expertos internacionales en alta joyería para garantizar la máxima calidad en cada creación.
+                    </p>
+                </div>
+                <div class="order-1 md:order-2">
+                    <img src="https://raw.githubusercontent.com/CAMILOSANCHEZDEVELOPER/Kleosjoyeria.bga/refs/heads/main/ceo.jpeg" alt="Gerente General Jhonatan Manrique" class="rounded-lg shadow-2xl w-full">
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NEWS SECTION ===== -->
+        <section id="noticias" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-serif text-center mb-12" data-lang="newsTitle">Últimas Noticias</h2>
+                <div class="max-w-2xl mx-auto space-y-8">
+                    <!-- News Card 1 -->
+                    <div class="bg-white/50 dark:bg-gray-900/50 p-6 rounded-lg shadow-md border border-gray-200/50 dark:border-gray-800/50 text-center">
+                        <h3 class="text-2xl font-semibold mb-2" data-lang="news1Title">Lanzamiento Colección "Aurora"</h3>
+                        <p class="leading-relaxed text-gray-700 dark:text-gray-300" data-lang="news1Text">Estamos emocionados de anunciar nuestra nueva colección "Aurora", inspirada en los viajes de nuestro fundador. Cada pieza captura la luz y el misterio de los destinos más exóticos. Disponible a partir del 1 de Octubre.</p>
+                    </div>
+                    <!-- News Card 2 -->
+                    <div class="bg-white/50 dark:bg-gray-900/50 p-6 rounded-lg shadow-md border border-gray-200/50 dark:border-gray-800/50 text-center">
+                        <h3 class="text-2xl font-semibold mb-2" data-lang="news2Title">KLEOS en la Semana de la Moda</h3>
+                        <p class="leading-relaxed text-gray-700 dark:text-gray-300" data-lang="news2Text">Nuestras joyas destacaron en la pasarela de la Semana de la Moda de Bogotá, complementando los diseños de reconocidos talentos nacionales. Un hito que reafirma nuestro compromiso con el lujo y el diseño colombiano.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT SECTION ===== -->
+        <section id="contacto" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-serif text-center mb-12" data-lang="contactTitle">Contáctanos</h2>
+                <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4" data-lang="formTitle">Envíanos un Mensaje</h3>
+                        <form id="contact-form" novalidate>
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 dark:text-gray-300 mb-2" data-lang="formName">Nombre</label>
+                                <input type="text" id="name" name="name" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-gray-700 dark:text-gray-300 mb-2" data-lang="formEmail">Correo Electrónico</label>
+                                <input type="email" id="email" name="email" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-gold" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="message" class="block text-gray-700 dark:text-gray-300 mb-2" data-lang="formMessage">Mensaje</label>
+                                <textarea id="message" name="message" rows="4" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:border-gold" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-gold text-black font-bold py-3 px-6 rounded-md hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300" data-lang="formButton">Enviar Mensaje</button>
+                        </form>
+                         <p id="form-success-message" class="hidden mt-4 text-center text-green-500" data-lang="formSuccess">¡Gracias! Tu mensaje ha sido enviado con éxito.</p>
+                    </div>
+                    <div class="mt-8 md:mt-0">
+                        <h3 class="text-2xl font-semibold mb-4" data-lang="infoTitle">Información</h3>
+                        <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                           <div class="flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <span>Bucaramanga, Colombia</span>
+                           </div>
+                            <div class="flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.85 0 3.58-.5 5.07-1.38l-1.4-1.4c-1.2.66-2.58 1.05-4.04 1.05-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8v.17l-2.5-2.5L18 9.34l4.66 4.66-4.66 4.66-1.17-1.17 2.5-2.5V12c0-4.41-3.59-8-8-8z" transform="scale(1.2) translate(-2.4, -2.4)"/><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 013.482 3.583c.636-.247 1.363-.416 2.427-.465C7.007 2.013 7.362 2 9.792 2h2.523zm0 2.163h-2.523c-2.386 0-2.674.01-3.615.056-.926.043-1.448.2-1.844.363a2.72 2.72 0 00-1.01 1.01c-.164.396-.32.918-.363 1.844-.046.942-.056 1.23-.056 3.615s.01 2.673.056 3.615c.043.926.2 1.448.363 1.844a2.72 2.72 0 001.01 1.01c.396.164.918.32 1.844.363.942.046 1.23.056 3.615.056s2.673-.01 3.615-.056c.926-.043 1.448-.2 1.844-.363a2.72 2.72 0 001.01-1.01c.164-.396.32-.918-.363-1.844.046-.942.056-1.23.056-3.615s-.01-2.673-.056-3.615c-.043-.926-.2-1.448-.363-1.844a2.72 2.72 0 00-1.01-1.01c-.396-.164-.918-.32-1.844-.363-.942-.046-1.23-.056-3.615-.056z" clip-rule="evenodd"></path><path d="M12 6.845a5.155 5.155 0 100 10.31 5.155 5.155 0 000-10.31zm0 8.162a3.007 3.007 0 110-6.014 3.007 3.007 0 010 6.014zM16.949 6.802a1.238 1.238 0 100 2.475 1.238 1.238 0 000-2.475z"></path></svg>
+                               <a href="https://www.instagram.com/kleosjoyeria.bga/" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">
+                                    @kleosjoyeria.bga
+                               </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-gray-100 dark:bg-gray-900 py-8 border-t border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-6 text-center text-gray-500 dark:text-gray-400">
+            <p class="mb-4">Desarrollado por Ingeniero Camilo Andrés Serrano Sánchez</p>
+            <p data-lang="footerRights">&copy; 2025 KLEOSJOYERIA.BGA. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <!-- ===== FLOATING BUTTONS ===== -->
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/573024440638" target="_blank" rel="noopener noreferrer" class="fixed bottom-5 left-5 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-all transform hover:scale-110 z-40">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M16.75 13.96c.25.13.41.2.52.34.11.14.11.44-.04.81-.15.37-.9.95-1.28 1.13-.38.18-1.03.3-1.57.15-.54-.15-1.44-.55-2.7-1.65-1.26-1.1-2.07-2.43-2.22-2.83-.15-.4-.01-.61.13-.8.14-.19.32-.42.49-.6.17-.18.27-.3.39-.5.12-.2.06-.41-.04-.55-.1-.14-.54-.64-.7-1.02-.16-.38-.34-.48-.5-.48-.16 0-.34.02-.5.02s-.41.06-.61.34c-.2.28-.77.76-.77,1.85s.8,2.15,1,2.3c.2.15,1.57,2.4,3.8,3.35,2.23.95,2.4,1.05,2.87.9.47-.15.93-.6,1.08-1.18.15-.58.15-1.08.11-1.18-.04-.1-.16-.16-.34-.26zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/></svg>
+    </a>
+
+    <!-- AI Assistant Button -->
+    <button id="ai-chat-button" class="fixed bottom-5 right-5 bg-gold text-black p-3 rounded-full shadow-lg hover:bg-white transition-all transform hover:scale-110 z-40">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9.5 9.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm3 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3.5-4c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg>
+    </button>
+    
+    <!-- AI Assistant Chat Window -->
+    <div id="ai-chat-window" class="hidden fixed bottom-24 right-5 w-80 max-w-[90vw] bg-white dark:bg-gray-800 text-black dark:text-gray-200 rounded-lg shadow-2xl z-40 fade-in">
+        <!-- Chat Header -->
+        <div class="bg-gray-800 dark:bg-gray-900 text-white p-3 rounded-t-lg flex justify-between items-center">
+            <h3 class="font-bold" data-lang="chatTitle">Asistente Virtual KLEOS</h3>
+            <button id="close-chat-button" class="text-white hover:text-gray-300">&times;</button>
+        </div>
+        <!-- Chat Body -->
+        <div id="chat-body" class="p-4 h-64 overflow-y-auto">
+            <!-- Initial message from AI -->
+            <div class="mb-3">
+                <p class="bg-gray-200 dark:bg-gray-700 dark:text-gray-200 p-2 rounded-lg inline-block" data-lang="chatWelcome">¡Hola! Soy tu asistente virtual. ¿Cómo puedo ayudarte con nuestras joyas de oro 18k?</p>
+            </div>
+        </div>
+        <!-- Chat Input -->
+        <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex">
+            <input type="text" id="chat-input" data-lang-placeholder="chatPlaceholder" placeholder="Escribe tu pregunta..." class="flex-grow bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-l-md p-2 focus:outline-none focus:border-black">
+            <button id="send-chat-button" class="bg-black dark:bg-gray-700 text-white px-4 rounded-r-md hover:bg-gray-800 dark:hover:bg-gray-600" data-lang="chatSend">Enviar</button>
+        </div>
+    </div>
+
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Theme Management ---
+            const theme = {
+                init: function() {
+                    this.set(this.get(), false);
+                    this.attachListeners();
+                },
+                get: function() {
+                    return localStorage.getItem('theme') || 'dark'; // Default to dark mode
+                },
+                set: function(mode, save = true) {
+                    if (save) localStorage.setItem('theme', mode);
+
+                    let newMode = mode;
+                    if (mode === 'system') {
+                        newMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                        if(save) localStorage.removeItem('theme');
+                    }
+                    
+                    if (newMode === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    this.updateIcon(mode);
+                },
+                updateIcon: function(mode) {
+                    const iconContainer = document.getElementById('theme-icon-desktop');
+                    let iconSvg = '';
+                     if (mode === 'light') {
+                        iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>';
+                    } else if (mode === 'dark') {
+                        iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>';
+                    } else { // system
+                        iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>';
+                    }
+                    iconContainer.innerHTML = iconSvg;
+                },
+                attachListeners: function() {
+                    const dropdownButton = document.getElementById('theme-dropdown-button');
+                    const optionsContainer = document.getElementById('theme-options');
+                    
+                    dropdownButton.addEventListener('click', (e) => {
+                         e.stopPropagation();
+                         optionsContainer.classList.toggle('hidden');
+                    });
+
+                    document.querySelectorAll('[data-theme-value]').forEach(el => {
+                        el.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const newTheme = e.currentTarget.getAttribute('data-theme-value');
+                            this.set(newTheme);
+                            optionsContainer.classList.add('hidden');
+                        });
+                    });
+
+                     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                        if (this.get() === 'system') {
+                            this.set('system');
+                        }
+                    });
+                }
+            };
+            theme.init();
+
+
+            // --- Language Translation ---
+            const translations = {
+                es: {
+                    navHome: "Inicio",
+                    navCollections: "Colecciones",
+                    navAbout: "Nosotros",
+                    navNews: "Noticias",
+                    navContact: "Contacto",
+                    mNavHome: "Inicio",
+                    mNavCollections: "Colecciones",
+                    mNavAbout: "Nosotros",
+                    mNavNews: "Noticias",
+                    mNavContact: "Contacto",
+                    heroTitle: "Elegancia que Perdura",
+                    heroSubtitle: "Diseños exclusivos en oro de 18 quilates que capturan la esencia del lujo moderno.",
+                    heroButton: "Descubrir Colección",
+                    collectionsTitle: "Nuestras Colecciones",
+                    catRings: "Anillos",
+                    catNecklaces: "Collares",
+                    catBracelets: "Pulseras",
+                    catEarrings: "Aretes",
+                    aboutTitle: "Gerente General",
+                    aboutP1: "Jhonatan David Manrique Bautista, de 23 años y Administrador de Negocios Internacionales, es la visión detrás de KLEOS. Radicado en Bucaramanga, se ha capacitado con los mejores expertos internacionales en alta joyería para garantizar la máxima calidad en cada creación.",
+                    aboutP2: "Su pasión por la excelencia y el diseño se complementa con su amor por los deportes acuáticos, infundiendo en cada pieza un espíritu de libertad, aventura y sofisticación.",
+                    newsTitle: "Últimas Noticias",
+                    news1Title: "Lanzamiento Colección \"Aurora\"",
+                    news1Text: "Estamos emocionados de anunciar nuestra nueva colección \"Aurora\", inspirada en los viajes de nuestro fundador. Cada pieza captura la luz y el misterio de los destinos más exóticos. Disponible a partir del 1 de Octubre.",
+                    news2Title: "KLEOS en la Semana de la Moda",
+                    news2Text: "Nuestras joyas destacaron en la pasarela de la Semana de la Moda de Bogotá, complementando los diseños de reconocidos talentos nacionales. Un hito que reafirma nuestro compromiso con el lujo y el diseño colombiano.",
+                    contactTitle: "Contáctanos",
+                    formTitle: "Envíanos un Mensaje",
+                    formName: "Nombre",
+                    formEmail: "Correo Electrónico",
+                    formMessage: "Mensaje",
+                    formButton: "Enviar Mensaje",
+                    formSuccess: "¡Gracias! Tu mensaje ha sido enviado con éxito.",
+                    infoTitle: "Información",
+                    footerRights: `© ${new Date().getFullYear()} KLEOSJOYERIA.BGA. Todos los derechos reservados.`,
+                    chatTitle: "Asistente Virtual KLEOS",
+                    chatWelcome: "¡Hola! Soy tu asistente virtual. ¿Cómo puedo ayudarte con nuestras joyas de oro 18k?",
+                    chatPlaceholder: "Escribe tu pregunta...",
+                    chatSend: "Enviar"
+                },
+                en: {
+                    navHome: "Home",
+                    navCollections: "Collections",
+                    navAbout: "About Us",
+                    navNews: "News",
+                    navContact: "Contact",
+                    mNavHome: "Home",
+                    mNavCollections: "Collections",
+                    mNavAbout: "About Us",
+                    mNavNews: "News",
+                    mNavContact: "Contact",
+                    heroTitle: "Enduring Elegance",
+                    heroSubtitle: "Exclusive designs in 18k gold that capture the essence of modern luxury.",
+                    heroButton: "Discover Collection",
+                    collectionsTitle: "Our Collections",
+                    catRings: "Rings",
+                    catNecklaces: "Necklaces",
+                    catBracelets: "Bracelets",
+                    catEarrings: "Earrings",
+                    aboutTitle: "General Manager",
+                    aboutP1: "Jhonatan David Manrique Bautista, 23, an International Business Administrator, is the vision behind KLEOS. Based in Bucaramanga, he has trained with the best international experts in high jewelry to ensure the highest quality in every creation.",
+                    aboutP2: "His passion for excellence and design is complemented by his love for water sports, infusing each piece with a spirit of freedom, adventure, and sophistication.",
+                    newsTitle: "Latest News",
+                    news1Title: "Launch of the \"Aurora\" Collection",
+                    news1Text: "We are excited to announce our new \"Aurora\" collection, inspired by our founder's travels. Each piece captures the light and mystery of the most exotic destinations. Available from October 1st.",
+                    news2Title: "KLEOS at Fashion Week",
+                    news2Text: "Our jewelry shone on the runway at Bogotá Fashion Week, complementing the designs of renowned national talents. A milestone that reaffirms our commitment to luxury and Colombian design.",
+                    contactTitle: "Contact Us",
+                    formTitle: "Send us a Message",
+                    formName: "Name",
+                    formEmail: "Email",
+                    formMessage: "Message",
+                    formButton: "Send Message",
+                    formSuccess: "Thank you! Your message has been sent successfully.",
+                    infoTitle: "Information",
+                    footerRights: `© ${new Date().getFullYear()} KLEOSJOYERIA.BGA. All rights reserved.`,
+                    chatTitle: "KLEOS Virtual Assistant",
+                    chatWelcome: "Hello! I am your virtual assistant. How can I help you with our 18k gold jewelry?",
+                    chatPlaceholder: "Type your question...",
+                    chatSend: "Send"
+                }
+            };
+
+            function setLanguage(lang) {
+                document.documentElement.lang = lang;
+                document.querySelectorAll('[data-lang]').forEach(el => {
+                    const key = el.getAttribute('data-lang');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.textContent = translations[lang][key];
+                    }
+                });
+                document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-lang-placeholder');
+                     if (translations[lang] && translations[lang][key]) {
+                        el.placeholder = translations[lang][key];
+                    }
+                });
+                // Update language display
+                document.getElementById('current-lang').textContent = lang.toUpperCase();
+            }
+            
+            function setupDropdown(buttonId, optionsId, callback) {
+                const button = document.getElementById(buttonId);
+                const options = document.getElementById(optionsId);
+                
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    options.classList.toggle('hidden');
+                });
+
+                options.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        const link = e.target.closest('a');
+                        callback(link);
+                        options.classList.add('hidden');
+                    }
+                });
+            }
+            
+            setupDropdown('lang-dropdown-button', 'lang-options', (link) => {
+                 setLanguage(link.getAttribute('data-lang-value'));
+            });
+
+            // Close dropdowns if clicked outside
+            document.addEventListener('click', () => {
+                document.getElementById('lang-options').classList.add('hidden');
+                document.getElementById('theme-options').classList.add('hidden');
+            });
+
+
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // --- Contact Form Handling ---
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('form-success-message');
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const name = contactForm.name.value.trim();
+                const email = contactForm.email.value.trim();
+                const message = contactForm.message.value.trim();
+
+                if (name === '' || email === '' || message === '') {
+                    alert('Por favor, completa todos los campos.');
+                    return;
+                }
+                
+                successMessage.classList.remove('hidden');
+                contactForm.reset();
+                
+                setTimeout(() => { successMessage.classList.add('hidden'); }, 5000);
+            });
+
+            // --- AI Chat Assistant ---
+            const chatButton = document.getElementById('ai-chat-button');
+            const chatWindow = document.getElementById('ai-chat-window');
+            const closeChatButton = document.getElementById('close-chat-button');
+            const chatBody = document.getElementById('chat-body');
+            const chatInput = document.getElementById('chat-input');
+            const sendChatButton = document.getElementById('send-chat-button');
+
+            chatButton.addEventListener('click', () => chatWindow.classList.toggle('hidden'));
+            closeChatButton.addEventListener('click', () => chatWindow.classList.add('hidden'));
+            
+            const aiResponses = { es: {"oro": "Sí, todas nuestras joyas están elaboradas con oro de 18 quilates, garantizando la más alta calidad y pureza.","envios": "¡Claro que sí! Realizamos envíos seguros a todo el territorio colombiano.","pago": "Aceptamos transferencias bancarias, Nequi, Daviplata y todas las principales tarjetas a través de nuestro link de pago seguro.","ubicacion": "Estamos orgullosamente ubicados en Bucaramanga, Colombia.","tienda": "Actualmente operamos como una joyería en línea, no contamos con tienda física.","default": "Soy un asistente virtual. Para consultas más específicas, por favor contáctanos a través de WhatsApp."}, en: {"gold": "Yes, all our jewelry is made with 18-karat gold, ensuring the highest quality.","shipping": "Of course! We offer secure shipping throughout Colombia.","payment": "We accept bank transfers, Nequi, Daviplata, and all major credit/debit cards.","location": "We are proudly located in Bucaramanga, Colombia.","store": "We currently operate as an online jewelry store.","default": "I am a virtual assistant. For specific inquiries, please contact us via WhatsApp."}};
+
+            function handleSendMessage() {
+                const userMessage = chatInput.value.trim();
+                if (userMessage === '') return;
+                appendMessage(userMessage, 'user');
+                chatInput.value = '';
+                setTimeout(() => {
+                    const currentLang = document.documentElement.lang || 'es';
+                    const aiReply = getAiResponse(userMessage, currentLang);
+                    appendMessage(aiReply, 'ai');
+                }, 1000);
+            }
+
+            sendChatButton.addEventListener('click', handleSendMessage);
+            chatInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleSendMessage());
+
+            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                const messageP = document.createElement('p');
+                messageP.textContent = message;
+
+                if (sender === 'user') {
+                    messageDiv.classList.add('text-right', 'mb-3');
+                    messageP.classList.add('bg-gold', 'text-black', 'p-2', 'rounded-lg', 'inline-block');
+                } else {
+                    messageDiv.classList.add('mb-3');
+                    messageP.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-gray-200', 'p-2', 'rounded-lg', 'inline-block');
+                }
+                messageDiv.appendChild(messageP);
+                chatBody.appendChild(messageDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            function getAiResponse(message, lang) {
+                const lowerCaseMessage = message.toLowerCase();
+                const responses = aiResponses[lang];
+                for (const key in responses) {
+                    if (lowerCaseMessage.includes(key)) return responses[key];
+                }
+                return responses.default;
+            }
+
+            // --- Enchanted Fireflies Effect ---
+            const canvas = document.getElementById('firefly-canvas');
+            const ctx = canvas.getContext('2d');
+            let state = {}; 
+
+            const enchantedLogic = (ctx, s) => {
+                const w = ctx.canvas.width; const h = ctx.canvas.height;
+                if (!s.p) {
+                    s.p = [];
+                    for (let i = 0; i < 60; i++) { // Increased particle count
+                        s.p.push({ x: Math.random() * w, y: Math.random() * h, sz: Math.random() * 2 + 1, sx: (Math.random() - 0.5) * 0.4, sy: (Math.random() - 0.5) * 0.4, o: Math.random() });
+                    }
+                }
+                ctx.clearRect(0, 0, w, h);
+                ctx.globalCompositeOperation = 'lighter'; // Glow effect
+                s.p.forEach(p => {
+                    p.x += p.sx; p.y += p.sy; p.o += (Math.random() - 0.5) * 0.1;
+                    if (p.o < 0) p.o = 0; if (p.o > 1) p.o = 1;
+                    if (p.x > w || p.x < 0) p.sx *= -1;
+                    if (p.y > h || p.y < 0) p.sy *= -1;
+                    const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.sz * 2.5);
+                    gradient.addColorStop(0, `rgba(220, 180, 80, ${p.o * 0.9})`);
+                    gradient.addColorStop(1, 'rgba(212, 175, 55, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.sz * 2.5, 0, Math.PI * 2); ctx.fill();
+                });
+            };
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                state = {}; 
+            }
+
+            function animate() {
+                enchantedLogic(ctx, state);
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            animate();
+            
+            // Set initial language after all setup
+            setLanguage('es'); 
+        });
+    </script>
+
+</body>
+</html>
+
